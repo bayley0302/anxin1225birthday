@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ANXIN · 生日纪念站</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="home.css">
+<script src="内容.js" defer></script>
+<script src="素材.js" defer></script>
+<script src="home.js" defer></script>
+<script>
+  let watchedOpening = false;
+  try { watchedOpening = sessionStorage.getItem('anxin-film-watched') === '1'; } catch {}
+  if (!watchedOpening) {
+    document.documentElement.hidden = true;
+    location.replace('index.html');
+  }
+</script>
+</head>
+<body class="archive">
+<div class="grain" aria-hidden="true"></div>
+<header><a href="#profile">ANXIN<span>✦</span></a><time id="date" datetime="2026-12-25"></time></header>
+<div class="archive-layout">
+<aside>
+<a class="nav-cross" href="#profile" aria-label="个人介绍首页">✠</a>
+<button id="directory" class="directory" type="button" aria-expanded="false" aria-controls="site-nav">栏目导航</button>
+<nav id="site-nav" aria-label="栏目导航">
+<a href="#profile">个人介绍</a>
+<a href="#planet">BOYS II PLANET</a>
+<a href="#master">大师课</a>
+<a href="#child">小安信</a>
+<a href="#challenge">抖音 Challenge</a>
+<a href="#asmr">ASMR</a>
+<a href="#pet">撸猫区</a>
+<a href="#wall">互动墙</a>
+<a class="back" href="index.html">重玩生日开屏</a>
+</nav>
+</aside>
+<main class="archive-main">
+<div class="archive-relief" aria-hidden="true"></div>
+<h1 id="section-title" tabindex="-1">个人介绍</h1>
+<section id="content" aria-labelledby="section-title"></section>
+<template id="wall-template">
+  <div class="wall">
+    <p class="wall-note">预览版留言保存在当前浏览器。</p>
+    <form id="wish-form">
+      <label>昵称 <input name="nickname" maxlength="24" placeholder="匿名也可以"></label>
+      <label>生日祝福 <textarea name="message" rows="4" maxlength="240" required></textarea></label>
+      <button class="primary" type="submit">留下祝福</button>
+      <p id="wall-status" role="status"></p>
+    </form>
+    <ul id="messages" aria-label="生日留言"></ul>
+  </div>
+</template>
+</main>
+</div>
+</body>
+</html>
+

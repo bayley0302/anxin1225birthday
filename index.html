@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ANXIN · 20岁生日</title>
+<link rel="stylesheet" href="style.css">
+<script src="内容.js" defer></script>
+<script src="cake.js" defer></script><script src="scene.js" defer></script>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<header><a href="./index.html" aria-label="ANXIN 生日开屏">ANXIN<span>✦</span></a><time id="date" datetime="2026-12-25"></time></header>
+<nav aria-label="悬浮导航"><button id="menu" type="button" aria-expanded="false" aria-controls="links" aria-label="打开导航"><i></i><i></i></button><div id="links" hidden><button id="home" type="button">生日开屏</button></div></nav>
+<main>
+<section id="scene" aria-label="生日吹蜡烛" data-state="ready">
+<div class="relief" aria-hidden="true"></div>
+<div class="title">
+<p class="kicker">A CHRISTMAS BIRTHDAY</p>
+<h1>ANXIN</h1>
+<p class="subtitle"><span></span> 周安信 · 20岁生日 <span></span></p>
+</div>
+<div id="cake" class="cake">
+<canvas width="600" height="610" role="img" aria-label="抹茶奶油与糖霜草莓装饰的圣诞树蛋糕"></canvas>
+<div class="candle" aria-hidden="true"><i class="flame"></i><i class="smoke"></i><i class="smoke second"></i></div>
+</div>
+<span class="wind" aria-hidden="true"></span>
+<button id="cat" type="button" aria-label="黑色像素猫，经过蛋糕，或按回车吹蜡烛"><img src="assets/pixel-cat.jpg" alt="" draggable="false"></button>
+</section>
+<div class="controls">
+<div id="intro"><p id="hint">拖动黑猫经过蛋糕，为安信吹灭蜡烛</p><button class="link" id="skip" type="button">跳过</button></div>
+<div id="celebrate" hidden><div role="status"><h2 id="greeting"></h2></div><div class="actions"><button class="primary" id="enter" type="button">观看开屏视频</button><button class="link" id="retry" type="button">重试</button></div></div>
+</div>
+</main>
+<dialog id="opening-film" aria-label="生日开屏视频">
+  <video id="opening-video" src="assets/opening-film.mp4" preload="none" playsinline aria-label="安信开屏视频"></video>
+  <p id="film-status" role="status" hidden></p>
+  <div class="actions">
+    <button class="primary" id="play-film" type="button" hidden>播放视频</button>
+    <button class="film-mute" id="film-mute" type="button" hidden>静音</button>
+  </div>
+</dialog>
+<dialog id="opening-voice" aria-labelledby="voice-brand" aria-describedby="voice-title">
+  <div class="voice-masthead"><h2 id="voice-brand">ANXIN</h2><span class="voice-cross" aria-hidden="true">✠</span></div>
+  <div class="voice-body">
+    <p id="voice-title" lang="ko" aria-live="polite">고마워, 케이크는 내가 사양 안 할게</p>
+    <audio id="voice-track" preload="none"></audio>
+    <div class="voice-player">
+      <button id="voice-play" type="button" aria-label="播放语音"><span aria-hidden="true">▶</span></button>
+      <div class="voice-timeline">
+        <input id="voice-progress" type="range" min="0" max="1" step="0.01" value="0" aria-label="语音播放进度" disabled>
+        <span id="voice-time" aria-hidden="true">0:00 / 0:00</span>
+      </div>
+    </div>
+    <div class="voice-actions">
+      <button id="voice-language" type="button">切换中文</button>
+      <button class="primary" id="voice-home" type="button">进入首页</button>
+    </div>
+  </div>
+</dialog>
+</body>
+</html>
+
+
+
