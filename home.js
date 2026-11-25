@@ -271,20 +271,19 @@ function petArea() {
   return section;
 }
 
-const storageKey = 'anxin-birthday-wishes-v1';
-let entries = [];
-try {
-  const saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
-  if (Array.isArray(saved)) entries = saved.filter(entry => typeof entry?.name === 'string' && typeof entry?.message === 'string');
-} catch {
-  // The form can still accept messages for the current session.
-}
+const wallApi = 'https://wtuxbsjjtptipoanaxkg.supabase.co/rest/v1/birthday_wishes';
+const wallKey = 'sb_publishable_-FCh69hb1Nv04yzwYegmJQ_UUDz22qX';
+const wallHeaders = {
+  apikey: wallKey,
+  Authorization: 'Bearer ' + wallKey
+};
 
 function wall() {
   const node = document.querySelector('#wall-template').content.cloneNode(true);
   const form = node.querySelector('form');
   const list = node.querySelector('#messages');
   const status = node.querySelector('#wall-status');
+  let entries = [];
   function draw() {
     list.replaceChildren();
     if (!entries.length) list.append(element('li', '', '还没有留言，写下第一条生日祝福吧。'));
@@ -294,7 +293,25 @@ function wall() {
       list.append(item);
     });
   }
-  form.addEventListener('submit', event => {
+  async function load(initial = false) {
+    if (initial) status.textContent = '正在加载大家的祝福…';
+    try {
+      const response = await fetch(wallApi + '?select=id,name,message,created_at&order=created_at.desc&limit=100', {
+        headers: wallHeaders
+      });
+      if (!response.ok) throw new Error('读取失败');
+      entries = await response.json();
+      if (initial || status.textContent === '正在加载大家的祝福…' || status.textContent === '留言墙暂时无法加载，请稍后重试。') status.textContent = '';
+      draw();
+    } catch {
+      status.textContent = '留言墙暂时无法加载，请稍后重试。';
+      draw();
+    } finally {
+      if (node.isConnected) window.setTimeout(() => load(false), 15000);
+    }
+  }
+
+  form.addEventListener('submit', async event => {
     event.preventDefault();
     const data = new FormData(form);
     const name = data.get('nickname').trim() || '匿名';
@@ -303,18 +320,30 @@ function wall() {
       status.textContent = '请填写生日祝福。';
       return;
     }
-    entries.unshift({name, message});
-    entries = entries.slice(0, 100);
+    const submit = form.querySelector('button[type="submit"]');
+    submit.disabled = true;
+    status.textContent = '正在发布祝福…';
     try {
-      localStorage.setItem(storageKey, JSON.stringify(entries));
-      status.textContent = '祝福已保存。';
+      const response = await fetch(wallApi, {
+        method: 'POST',
+        headers: {...wallHeaders, 'Content-Type': 'application/json', Prefer: 'return=representation'},
+        body: JSON.stringify({name, message})
+      });
+      if (!response.ok) throw new Error('写入失败');
+      const [entry] = await response.json();
+      entries.unshift(entry);
+      entries = entries.slice(0, 100);
+      status.textContent = '祝福已发布。';
+      draw();
+      form.reset();
     } catch {
-      status.textContent = '祝福已显示，此浏览器暂时无法保存。';
+      status.textContent = '发布失败，请稍后重试。';
+    } finally {
+      submit.disabled = false;
     }
-    form.reset();
-    draw();
   });
   draw();
+  load(true);
   return node;
 }
 
